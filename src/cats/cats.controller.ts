@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 //Utilisation de Request object et Express
 //import { Request } from 'express';
@@ -21,7 +22,8 @@ export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
+  //si j'installe calss-validation jepeux l'utiliser pour vérifier que le body de mon createCatDto est conforme
+  async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     // return 'This action adds a new cat';
     this.catsService.create(createCatDto);
   }
@@ -38,7 +40,8 @@ export class CatsController {
   //     return `This action returns a #${params.id} cat`;
   //   }
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  //Parse IntPipe assure que le param id est un integer ou renvoie une erreur pour que findOne ne cherche pas à s'exécuter
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.catsService.findOne(id);
   }
 }
