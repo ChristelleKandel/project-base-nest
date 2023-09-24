@@ -22,7 +22,7 @@ export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Post()
-  //si j'installe calss-validation jepeux l'utiliser pour vérifier que le body de mon createCatDto est conforme
+  //si j'installe class-validation je peux l'utiliser pour vérifier que le body de mon createCatDto est conforme
   async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     // return 'This action adds a new cat';
     this.catsService.create(createCatDto);
