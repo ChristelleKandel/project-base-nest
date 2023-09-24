@@ -15,12 +15,12 @@ export class UsersService {
 
   findAll() {
     return `This action returns all users`;
-    // return this.prima.book.findMany();
+    // return this.prisma.book.findMany();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
-    // return this.prima.book.findUnique({ where: { id }});
+    // return this.prisma.book.findUnique({ where: { id }});
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
