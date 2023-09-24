@@ -11,6 +11,10 @@ import { UsersModule } from './users/users.module';
 import { CatsController } from './cats/cats.controller';
 import { CatsService } from './cats/cats.service';
 
+// Le decorateur @Module permet de  créer un module. 
+//Pour configurer un module, on "décore" une class et on lui passe un objet de configuration
+// par exemple il y a une cle controllers pour déclarer les controllers propres à ce module, 
+// une clé pour déclarer les providers propres à ce module (les services font partie des providers), etc...
 @Module({
   imports: [UsersModule],
   controllers: [AppController, CatsController],
