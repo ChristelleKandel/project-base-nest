@@ -14,6 +14,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  // (port 3000) par défaut
   await app.listen(3000);
 }
 bootstrap();
