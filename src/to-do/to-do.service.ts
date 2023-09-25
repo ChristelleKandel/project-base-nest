@@ -3,7 +3,7 @@ import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
 //Appel de mon interface pour typer le retour de findAll()
 import { Todo } from './interfaces/todo.interface';
-import { ToDo } from './entities/to-do.entity';
+// import { ToDo } from './entities/to-do.entity';
 import { NotFoundError } from 'rxjs';
 
 @Injectable()
@@ -33,8 +33,7 @@ export class ToDoService {
 
   create(createToDoDto: CreateToDoDto) {
     // return 'This action adds a new toDo';
-    // on duplique notre tableau [...todos] et on lui ajoute createToDoDto
-    return this.todos = [...this.todos, createToDoDto];
+    return this.todos.push(createToDoDto);
   }
 
   //Je rajoute que le return doit être de type Todo[] d'après l'interface que j'ai créée, et importée
