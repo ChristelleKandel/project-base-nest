@@ -18,8 +18,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  create(@Body() data: CreateUserDto) {
+    return this.usersService.createUser(data);
   }
   //Prisma
   //Ajout de l'auteur qui publie le post
@@ -48,7 +48,7 @@ export class UsersController {
     });
   }
 
-  @Delete(':id')
+  @Delete('delete-user/:id')
   async remove(@Param('id') id: string): Promise<UserModel> {
     return this.usersService.deleteUser({ id: Number(id) });
   }

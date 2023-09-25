@@ -16,6 +16,7 @@ import { CatsService } from './cats/cats.service';
 //Ajout automatique des module créer avec nest g mo ou nest g resource (g pour générate)
 import { ToDoModule } from './to-do/to-do.module';
 import { PostModule } from './post/post.module';
+import { PrismaService } from './prisma.service';
 
 // Le decorateur @Module permet de  créer un module. 
 //Pour configurer un module, on "décore" une class et on lui passe un objet de configuration
@@ -24,6 +25,6 @@ import { PostModule } from './post/post.module';
 @Module({
   imports: [ConfigModule.forRoot(), UsersModule, ToDoModule, PostModule],
   controllers: [AppController, CatsController],
-  providers: [AppService, CatsService],
+  providers: [AppService, CatsService, PrismaService],
 })
 export class AppModule {}
