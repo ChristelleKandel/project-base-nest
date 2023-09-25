@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 //Prisma
 import { User as UserModel } from '@prisma/client';
 
@@ -17,36 +17,39 @@ import { User as UserModel } from '@prisma/client';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.createUser(createUserDto);
+  }
   //Prisma
   //Ajout de l'auteur qui publie le post
-  @Post('user')
-  async signupUser(
-    @Body() userData: { name?: string; email: string; password: string; },
-  ): Promise<UserModel> {
-    return this.usersService.createUser(userData);
+  // @Post('user')
+  // async signupUser(
+  //   @Body() userData: { name?: string; email: string; password: string; },
+  // ): Promise<UserModel> {
+  //   return this.usersService.createUser(userData);
+  // }
+
+  @Get()
+  async findAll(): Promise<UserModel[]> {
+    return this.usersService.users({});
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
+  @Get('user/:id')
+  async findOne(@Param('id') id: string): Promise<UserModel> {
+    return this.usersService.user({ id: Number(id) });
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
+  @Patch('update-user/:id')
+  async update(@Param('id, where') id: string, @Body() data: UpdateUserDto): Promise<UserModel> {
+    return this.usersService.updateUser({
+      where: { id: Number(id) },
+      data,
+    });
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(+id);
-  // }
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<UserModel> {
+    return this.usersService.deleteUser({ id: Number(id) });
+  }
 }
