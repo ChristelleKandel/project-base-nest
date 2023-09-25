@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 //Appel de mon interface pour typer le retour de findAll()
 //import { User } from './entities/user.entity';
 //Ajout de prisma
@@ -35,16 +35,33 @@ export class UsersService {
       orderBy,
     });
   }
-
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  //  prisma
+  // async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  //   return this.prisma.user.create({
+  //     data,
+  //   });
+  // }
+  //Avec utilisation de DTO pour les validations
+  async createUser(data: CreateUserDto): Promise<User> {
     return this.prisma.user.create({
       data,
     });
   }
 
+  // async updateUser(params: {
+  //   where: Prisma.UserWhereUniqueInput;
+  //   data: Prisma.UserUpdateInput;
+  // }): Promise<User> {
+  //   const { where, data } = params;
+  //   return this.prisma.user.update({
+  //     data,
+  //     where,
+  //   });
+  // }
+  // Avec utilisation de DTO pour les validations
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
+    data:  UpdateUserDto;
   }): Promise<User> {
     const { where, data } = params;
     return this.prisma.user.update({
@@ -52,6 +69,7 @@ export class UsersService {
       where,
     });
   }
+ 
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
