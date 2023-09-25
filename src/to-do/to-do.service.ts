@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
 //Appel de mon interface pour typer le retour de findAll()
 import { Todo } from './interfaces/todo.interface';
 // import { ToDo } from './entities/to-do.entity';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ToDoService {
@@ -52,7 +51,7 @@ export class ToDoService {
     // retrouver le todo à changer avec son id
     const toDoToUpdate = this.todos.find(t => t.id === +id);
     if(!toDoToUpdate){
-      return new NotFoundError("Il n\'existe pas de todo assoxié à cet id");
+      return new NotFoundException("Il n\'existe pas de todo associé à cet id");
     }
     //appliquer les modifications et seulement les modifications, 
     //pour ne pas tout remplir de nouveau on vérifie seulement les champs qui ont été remplis dans le formulaire update

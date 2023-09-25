@@ -19,12 +19,12 @@ async function bootstrap() {
   );
 
   //Ajout de swagger
-  //exemple avec les cats
+  //exemple de config, personnalisable, visible sur localhost:3000/api
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('CKweb swagger')
+    .setDescription('The API description: test de nestJS')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('nestJS')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

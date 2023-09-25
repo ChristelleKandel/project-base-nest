@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 //Appel de mon interface pour typer le retour de findAll()
@@ -14,9 +14,13 @@ export class UsersService {
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
+    if(!user){
+      throw new NotFoundException(`Il n\'existe pas d\'utilisateur avec cet id`)
+    }
+    return user;
   }
 
   async users(params: {
@@ -69,7 +73,6 @@ export class UsersService {
       where,
     });
   }
- 
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
