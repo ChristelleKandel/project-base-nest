@@ -6,19 +6,28 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 //Prisma
 import { User as UserModel } from '@prisma/client';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() data: CreateUserDto) {
+  //Connection d'un user 
+  @Post('sign-in')
+  signIn(@Body(ValidationPipe) data: AuthCredentialsDto) {
+    return this.usersService.connectUser(data);
+  }
+
+  //Enregistrement d'un nouvel user 
+  @Post('sign-up')
+  create(@Body(ValidationPipe) data: CreateUserDto) {
     return this.usersService.createUser(data);
   }
   //Prisma
@@ -35,7 +44,7 @@ export class UsersController {
     return this.usersService.users({});
   }
 
-  @Get('user/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserModel> {
     return this.usersService.user({ id: Number(id) });
   }

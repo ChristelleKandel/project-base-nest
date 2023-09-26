@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 //Appel de mon interface pour typer le retour de findAll()
@@ -6,6 +6,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 //Ajout de prisma
 import { PrismaService } from '../prisma.service';
 import { User, Prisma } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Injectable()
 export class UsersService {
@@ -47,9 +49,39 @@ export class UsersService {
   // }
   //Avec utilisation de DTO pour les validations
   async createUser(data: CreateUserDto): Promise<User> {
+    // Hash the password
+    data.password = await bcrypt.hash(data.password, 10);
+    //Insert the user into the Database via Prisma
     return this.prisma.user.create({
       data,
     });
+  }
+
+  //Connexion
+  private async findByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    if(!user) {
+      throw new NotFoundException(`Il n\'y a pas d\'utilisateur correspondant à cet email ${email}`)
+    }
+    return user;
+  }
+  async connectUser(authUser: AuthCredentialsDto){
+    let user: User;
+    const credentialsInvalid = `Les paramètres de connection ne sont pas les bons`;
+    try {
+      user = await this.findByEmail(authUser.email);
+    }catch{
+      throw new UnauthorizedException(credentialsInvalid);
+    }
+    const isMatch = await bcrypt.compare(authUser.password, user.password);
+    if(!isMatch){
+      throw new UnauthorizedException (credentialsInvalid)
+    }
+    return{
+      message: "Bienvenue, vous avez été connecté avec succès."
+    }
   }
 
   // async updateUser(params: {
