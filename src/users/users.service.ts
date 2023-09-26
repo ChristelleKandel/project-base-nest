@@ -8,11 +8,16 @@ import { PrismaService } from '../prisma.service';
 import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+//JWT pour token lors de la connection
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   //ajout prisma
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService
+    ) {}
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
