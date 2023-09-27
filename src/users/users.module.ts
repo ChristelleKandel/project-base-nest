@@ -4,6 +4,7 @@ import { UsersController } from './users.controller';
 import { PrismaService } from 'src/prisma.service';
 
 @Module({
+  imports: [JwtModule],
   controllers: [UsersController],
   providers: [UsersService, PrismaService],
 })
