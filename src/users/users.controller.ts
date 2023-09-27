@@ -20,6 +20,8 @@ import { User as UserModel } from '@prisma/client';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 //Guards
 import { AuthGuard } from './auth.guard';
+import { Roles } from 'src/roles/roles.decorators';
+import { Role } from 'src/roles/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -30,6 +32,13 @@ export class UsersController {
   @Post('sign-in')
   signIn(@Body(ValidationPipe) data: AuthCredentialsDto) {
     return this.usersService.connectUser(data);
+  }
+
+  //le compte de l'utilisateur connecté avec guard (pas de méthode dans service ??)
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 
   //Enregistrement d'un nouvel user 
@@ -47,6 +56,7 @@ export class UsersController {
   // }
 
   @Get()
+  @Roles(Role.Admin) // Attention il faut ajouter le role dans User [] dans Prisma.schema sinon il n'y a pas de role admin pour lemoment
   async findAll(): Promise<UserModel[]> {
     return this.usersService.users({});
   }
