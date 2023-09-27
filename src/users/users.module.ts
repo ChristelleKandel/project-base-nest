@@ -7,6 +7,8 @@ import { jwtConstants } from './constants';
 //Passport (facultatif)
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [JwtModule,
@@ -14,11 +16,19 @@ import { LocalStrategy } from './local.strategy';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '30d' },
     }),
     PassportModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, PrismaService, LocalStrategy],
+  providers: [
+    UsersService, 
+    PrismaService, 
+    LocalStrategy, 
+    //Ajout global de guards => tous les endpoints de ce module seront privés 
+    {
+    provide: APP_GUARD,
+    useClass: AuthGuard,
+  },],
 })
 export class UsersModule {}

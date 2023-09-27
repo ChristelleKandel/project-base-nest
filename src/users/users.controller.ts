@@ -7,6 +7,10 @@ import {
   Param,
   Delete,
   ValidationPipe,
+  HttpCode,
+  HttpStatus,
+  Request,
+  UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,12 +18,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 //Prisma
 import { User as UserModel } from '@prisma/client';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+//Guards
+import { AuthGuard } from './auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   //Connection d'un user 
+  @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   signIn(@Body(ValidationPipe) data: AuthCredentialsDto) {
     return this.usersService.connectUser(data);
@@ -44,6 +51,7 @@ export class UsersController {
     return this.usersService.users({});
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserModel> {
     return this.usersService.user({ id: Number(id) });

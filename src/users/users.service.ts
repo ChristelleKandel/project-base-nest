@@ -18,6 +18,7 @@ export class UsersService {
     private prisma: PrismaService,
     private jwtService: JwtService
     ) {}
+
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
@@ -72,7 +73,7 @@ export class UsersService {
     }
     return user;
   }
-  async connectUser(authUser: AuthCredentialsDto){
+  async connectUser(authUser: AuthCredentialsDto): Promise<any>{
     let user: User;
     const credentialsInvalid = `Les paramètres de connection ne sont pas les bons`;
     try {
