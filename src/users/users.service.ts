@@ -84,8 +84,13 @@ export class UsersService {
     if(!isMatch){
       throw new UnauthorizedException (credentialsInvalid)
     }
-    return{
-      message: "Bienvenue, vous avez été connecté avec succès."
+    // return{
+    //   message: "Bienvenue, vous avez été connecté avec succès."
+    // }
+    //Avec JWT
+    const payload = { sub: user.id, useremail: user.email };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
     }
   }
 
